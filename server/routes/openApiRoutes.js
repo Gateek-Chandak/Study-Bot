@@ -23,13 +23,13 @@ router.post('/query-optimizer', async (req, res) => {
     try {
         const completion = await openai.chat.completions.create({
             messages: [{ role: "user", content: 
-                `give me a search query for ${prompt} on google. only return the query without quotations` }],
+                `give me the best and most optimal search query for ${prompt} on google. only return the query without quotations` }],
             model: "gpt-4o",
         });
         const response = await completion.choices[0].message.content
 
         res.status(200).json({ response });
-    } catch (error) {
+    } catch (error) { 
         console.log(error)
         res.status(500).json({ error: "Error generating response" });
     }
