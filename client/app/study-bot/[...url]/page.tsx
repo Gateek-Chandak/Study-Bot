@@ -1,7 +1,9 @@
 import { ragChat } from "./serverComponents/ragChat";
 import { redis } from "./serverComponents/redis";
+import { cookies } from "next/headers";
 
 import ChatBox from "./clientComponents/ChatBox";
+import PageHeader from "../serverComponents/Header";
 
 interface PageProps {
     params: {
@@ -18,12 +20,16 @@ const formatUrl = ( url: string[] ) => {
 export const WebpagePage = async ( { params }: PageProps ) => {
 
     const formatedUrl = formatUrl(params.url as string[])
+    const sessionCookie = cookies().get("sessionID")?.value
 
     const isAlreadyLoaded = await redis.sismember("loaded-urls", formatedUrl)
 
-    const sessionID = "mock-session"
+    const sessionId = (formatedUrl + "--" + sessionCookie).replace(/\//g, "")
+
+    const initialMessages = await ragChat.history.getMessages({amount: 10, sessionId})
 
     if (!isAlreadyLoaded) {
+        console.log(2)
         await ragChat.context.add({
             type: "html",
             source: formatedUrl,
@@ -31,18 +37,23 @@ export const WebpagePage = async ( { params }: PageProps ) => {
         })
 
         await redis.sadd("loaded-urls", formatedUrl)
+    } else {
+        console.log(1)
     }
 
     return ( 
-        <div className="w-full h-screen flex flex-row">
-            <iframe 
-                src={formatedUrl} 
-                width="50%" 
-                height="100%" 
-                style={{ border: "2px blue solid" }}
-            ></iframe>
-            <ChatBox sessionID={sessionID}/>
-        </div> 
+        <div className="w-full h-screen flex flex-col overflow-auto">
+            <PageHeader />
+            <div className="flex flex-row flex-1 overflow-auto">
+                <iframe 
+                    src={formatedUrl} 
+                    width="50%" 
+                    height="100%" 
+                    style={{ border: "" }}
+                ></iframe>
+                <ChatBox sessionID={sessionId} initialMessages={initialMessages}/>
+            </div> 
+        </div>
     );
 }
 

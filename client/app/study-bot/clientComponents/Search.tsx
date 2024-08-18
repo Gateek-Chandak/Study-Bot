@@ -33,13 +33,12 @@ const SearchSection = () => {
      }
  
      return (
-        <form onSubmit={handleSubmit} className="flex flex-row justify-center gap-3 bottom-0 absolute w-full h-20 backdrop-blur-sm">
+        <form onSubmit={handleSubmit} className="flex flex-row justify-center bottom-0 absolute w-full h-20 backdrop-blur-sm">
             <Input type="text" value={value} 
                 placeholder="Search for something to learn..."
                 onChange={(e) => setValue(e.target.value)} 
                 className="w-1/3 text-lg"
                 classNames={{inputWrapper: "h-12 p-4 bg-zinc-300 rounded-full"}}/>
-            <Button className="text-gray-200 rounded-full h-12" color="primary" onClick={handleSubmit} variant="solid">search</Button>
         </form>
      );
 }

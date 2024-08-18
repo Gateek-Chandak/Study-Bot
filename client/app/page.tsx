@@ -4,7 +4,8 @@ export default function Home() {
 
   return (
     <div className="m-5">
-      <Link href="/home" className="bg-black text-white m-5 p-2 rounded-lg">Get Started</Link>
+      <Link href="/study-bot" className="bg-black text-white m-5 p-2 rounded-lg">Study-Bot</Link>
+      <Link href="/docu-bot" className="bg-black text-white m-5 p-2 rounded-lg">Docu-Bot</Link>
     </div>
   );
 }
